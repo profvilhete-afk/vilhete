@@ -1,0 +1,56 @@
+name: Gerar APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Preparar arquivos web
+        run: npm run prepare-web
+
+      - name: Criar projeto Android
+        run: npx cap add android
+
+      - name: Gerar ícone e tela de abertura
+        continue-on-error: true
+        run: npx capacitor-assets generate --android --iconBackgroundColor "#14121f" --iconBackgroundColorDark "#14121f" --splashBackgroundColor "#14121f" --splashBackgroundColorDark "#14121f"
+
+      - name: Sincronizar
+        run: npx cap sync android
+
+      - name: Usar sempre a mesma assinatura (permite atualizar sem perder dados)
+        run: |
+          mkdir -p ~/.android
+          cp android-keystore/debug.keystore ~/.android/debug.keystore
+
+      - name: Compilar APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Renomear APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk GameCollection.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GameCollection-APK
+          path: GameCollection.apk

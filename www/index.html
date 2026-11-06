@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#14121f">
+  <title>Game Collection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="backBtn" aria-label="Voltar" hidden></button>
+    <h1 id="pageTitle">Game Collection</h1>
+    <span class="topbar-spacer"></span>
+  </header>
+
+  <main id="view"></main>
+
+  <button class="fab" id="fab" aria-label="Adicionar" hidden></button>
+
+  <nav class="tabbar" id="tabbar">
+    <a href="#/" data-tab="home"><i data-icon="home"></i><span>Início</span></a>
+    <a href="#/consoles" data-tab="consoles"><i data-icon="tv"></i><span>Consoles</span></a>
+    <a href="#/games" data-tab="games"><i data-icon="gamepad"></i><span>Jogos</span></a>
+    <a href="#/accessories" data-tab="accessories"><i data-icon="headset"></i><span>Acessórios</span></a>
+    <a href="#/backup" data-tab="backup"><i data-icon="database"></i><span>Backup</span></a>
+  </nav>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box">
+      <p id="modalText"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="modalCancel">Cancelar</button>
+        <button class="btn danger" id="modalOk">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- capacitor.js é copiado automaticamente na hora de gerar o APK -->
+  <script src="capacitor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

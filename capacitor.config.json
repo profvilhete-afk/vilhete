@@ -1,0 +1,8 @@
+{
+  "appId": "com.vilhete.gamecollection",
+  "appName": "Game Collection",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#14121f"
+  }
+}
