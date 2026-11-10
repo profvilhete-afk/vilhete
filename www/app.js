@@ -490,8 +490,29 @@ async function renderBackup() {
   });
 }
 
+/* ---------------- Botão "voltar" do Android ---------------- */
+// Sem isso o Android fecha o app ao apertar "voltar".
+// Agora: fecha a caixa aberta > sai do formulário > volta ao Início > pergunta se quer sair.
+let exitAsking = false;
+function setupBackButton() {
+  const App = nativePlugin('App');
+  if (!App || !App.addListener) return;
+  App.addListener('backButton', async () => {
+    if (!$('#modal').hidden) { $('#modalCancel').click(); return; }
+    const [section, action] = (location.hash.replace(/^#\/?/, '') || '').split('/').filter(Boolean);
+    if (section && (action === 'new' || action === 'edit')) { history.back(); return; }
+    if (section) { location.hash = '#/'; return; }
+    if (exitAsking) return;
+    exitAsking = true;
+    const sair = await confirmBox('Deseja sair do Game Collection?', 'Sair');
+    exitAsking = false;
+    if (sair) App.exitApp();
+  });
+}
+
 /* ---------------- Início do app ---------------- */
 hydrateIcons();
+setupBackButton();
 window.addEventListener('hashchange', route);
 // Pede ao navegador para não apagar os dados por falta de espaço
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
